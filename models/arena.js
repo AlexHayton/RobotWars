@@ -1,5 +1,4 @@
-var model = require('nodejs-model');
-var typeOfIs = require('type-of-is');
+var validate = require('validate.js');
 
 // Arena model
 // -----------
@@ -12,74 +11,42 @@ var typeOfIs = require('type-of-is');
 //
 // Robot collision can be switched on or off based on preference.
 
-module.exports = model("Arena")
-    .attr('sizeX', {
-        validations: {
-            presence: {
-                message: 'X size is required!'
-            },
-            format: { 
-                with: /^\d+$/, 
-                message: 'sizeX must be an integer!' 
-            },
-            greaterThanZero: {
-                message: "arena cannot be zero size!"
-            }
+exports.create = function() {
+    return { 
+        sizeX: 0,
+        sizeY: 0,
+        robots: [],
+        robotsCollide: true
+    };
+};
+
+var constraints = {
+    sizeX: {
+        presence: true,
+        numericality: {
+          onlyInteger: true,
+          greaterThan: 0,
         }
-    })
-    .attr('sizeY', {
-        validations: {
-            presence: {
-                message: 'Y size is required!'
-            },
-            format: { 
-                with: /^\d+$/, 
-                message: 'sizeY must be an integer!' 
-            },
-            greaterThanZero: {
-                message: "arena cannot be zero size!"
-            }
+    },
+    sizeY: {
+        presence: true,
+        numericality: {
+          onlyInteger: true,
+          greaterThan: 0,
         }
-    })
+    },
     // This is an array containing all of the active robots.
-    .attr('robots', {
-        validations: {
-            presence: {
-                message: 'robots is required!'
-            },
-            isArray: {
-                message: 'robots must be an array!'
-            }
-        }
-    })
-    .attr('robotsCollide', {
-        validations: {
-            presence: {
-                message: 'robotsCollide is required!'
-            },
-            isBoolean: {
-                message: 'robotsCollide must be a boolean!'
-            }
-        }
-    });
-    
-    module.exports.validator('greaterThanZero', function(model, property, options) {
-        var numberProp = model[property]();
-        if ((!Type.is(numberProp, Number))
-            ||
-            numberProp <= 0) {
-            model.addError(property, options.message);
-        }
-    });
-    
-    module.exports.validator('isArray', function(model, property, options) {
-        if (!(model[property]().isArray)) {
-            model.addError(property, options.message);
-        }
-    });
-    
-    module.exports.validator('isBoolean', function(model, property, options) {
-        if (!(Type.is(model[property](), Boolean))) {
-            model.addError(property, options.message);
-        }
-    });
+    robots: {
+    },
+    robotsCollide: {
+        presence: true
+    }
+};
+
+exports.validate = function(arena)
+{
+    var validationErrors = validate(arena, constraints);
+    if (validationErrors) {
+        throw new Error(validationErrors);
+    }
+}

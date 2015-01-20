@@ -1,5 +1,5 @@
-var model = require('nodejs-model');
-var Enum = require('enum');
+var validate = require('validate.js');
+var DirectionEnum = require("./direction.js");
 
 // Robot model
 // -----------
@@ -10,41 +10,45 @@ var Enum = require('enum');
 
 // By default, two robots cannot occupy the same space in the arena.
 
-module.exports = model("Robot")
-    .attr('x', {
-        validations: {
-            presence: {
-                message: 'X coordinate is required!'
+exports.create = function() {
+    return { 
+        x: 0,
+        y: 0,
+        direction: DirectionEnum.North
+    };
+};
+
+var constraints = {
+    x: {
+        presence: true,
+        numericality: {
+          onlyInteger: true,
+          greaterThan: 0,
+        }
+    },
+    y: {
+        presence: true,
+        numericality: {
+          onlyInteger: true,
+          greaterThan: 0,
+        }
+    },
+    direction: {
+        presence: true,
+        inclusion: {
+            within: {
+                "North": DirectionEnum.North, 
+                "East": DirectionEnum.East,
+                "South": DirectionEnum.South,
+                "West": DirectionEnum.West,
             }
-        },
-        format: { 
-            with: /^\d+$/, 
-            message: 'X coordinate must be an integer!' 
         }
-    })
-    .attr('y', {
-        validations: {
-            presence: {
-                message: 'Y coordinate is required!'
-            },
-            format: { 
-                with: /^\d+$/, 
-                message: 'Y coordinate must be an integer!' 
-            }
-        }
-    })
-    .attr('direction', {
-        validations: {
-            presence: {
-                message: 'Direction is required!'
-            },
-            isEnum: {
-                message: 'Direction must be an Enum!' 
-            }
-        }
-    })
-    .validator('isEnum', function(model, property, options) {
-        if (!(model[property]() instanceof Enum)) {
-            model.addError(property, options.message);
-        }
-    });
+    },
+}
+
+exports.validate = function(robot) {
+    var validationErrors = validate(robot, constraints);
+    if (validationErrors) {
+        throw new Error(validationErrors);
+    }
+}

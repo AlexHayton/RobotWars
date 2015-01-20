@@ -1,4 +1,5 @@
 var ArenaModel = require("../models/arena.js");
+var deferred = require("deferred");
 
 // arenaController
 // ---------------
@@ -13,7 +14,7 @@ var ArenaModel = require("../models/arena.js");
 var arena = null;
 
 exports.ArenaReady = function () {
-    return arena === null;
+    return arena !== null;
 }
 
 exports.CreateArena = function (sizeX, sizeY) {
@@ -23,14 +24,7 @@ exports.CreateArena = function (sizeX, sizeY) {
     arena.robots = [];
     arena.robotsCollide = true;
     
-    arena.validate(function() {
-        if (!arena.isValid)
-        {
-            //validation failed, dump validation errors to the console
-            console.error(arena.errors);
-            throw new Error(arena.errors);
-        }
-    });
+    ArenaModel.validate(arena);
 }
 
 exports.AddRobot = function (robot) {
