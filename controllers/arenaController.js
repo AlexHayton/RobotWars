@@ -28,6 +28,7 @@ exports.CreateArena = function (sizeX, sizeY) {
         {
             //validation failed, dump validation errors to the console
             console.error(arena.errors);
+            throw new Error(arena.errors);
         }
     });
 }

@@ -21,6 +21,9 @@ module.exports = model("Arena")
             format: { 
                 with: /^\d+$/, 
                 message: 'sizeX must be an integer!' 
+            },
+            greaterThanZero: {
+                message: "arena cannot be zero size!"
             }
         }
     })
@@ -32,6 +35,9 @@ module.exports = model("Arena")
             format: { 
                 with: /^\d+$/, 
                 message: 'sizeY must be an integer!' 
+            },
+            greaterThanZero: {
+                message: "arena cannot be zero size!"
             }
         }
     })
@@ -54,6 +60,15 @@ module.exports = model("Arena")
             isBoolean: {
                 message: 'robotsCollide must be a boolean!'
             }
+        }
+    });
+    
+    module.exports.validator('greaterThanZero', function(model, property, options) {
+        var numberProp = model[property]();
+        if ((!Type.is(numberProp, Number))
+            ||
+            numberProp <= 0) {
+            model.addError(property, options.message);
         }
     });
     
