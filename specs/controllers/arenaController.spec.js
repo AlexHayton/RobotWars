@@ -73,59 +73,75 @@ describe("Arena Controller :: ", function () {
         })
         
         describe("Outside of the arena", function () {
-            it("above and to the left is invalid", function () {
+            it("North West is invalid", function () {
                 expect(arenaController.CheckIsSpaceValid(250, -100)).toEqual(false);
             });
             
-            it("above is invalid", function () {
+            it("North is invalid", function () {
                 expect(arenaController.CheckIsSpaceValid(250, 150)).toEqual(false);
             });
             
-            it("above and to the right is invalid", function () {
+            it("North East is invalid", function () {
                 expect(arenaController.CheckIsSpaceValid(250, 250)).toEqual(false);
             });
             
-            it("to the left is invalid", function () {
+            it("West is invalid", function () {
                 expect(arenaController.CheckIsSpaceValid(-50, 100)).toEqual(false);
             });
             
-            it("to the right is invalid", function () {
+            it("East is invalid", function () {
                 expect(arenaController.CheckIsSpaceValid(250, 100)).toEqual(false);
             });
             
-            it("below and to the left is invalid", function () {
+            it("South West is invalid", function () {
                 expect(arenaController.CheckIsSpaceValid(-100, -100)).toEqual(false);
             });
             
-            it("below is invalid", function () {
+            it("South is invalid", function () {
                 expect(arenaController.CheckIsSpaceValid(100, -100)).toEqual(false);
             });
             
-            it("below and to the right is invalid", function () {
+            it("South East is invalid", function () {
                 expect(arenaController.CheckIsSpaceValid(250, -100)).toEqual(false);
             });
         });
         
         describe("On the edge of the arena", function () {
-            it("is on the top edge", function () {
-                expect(arenaController.CheckIsSpaceValid(100, 199)).toEqual(true);
+            it("is on the North edge", function () {
+                expect(arenaController.CheckIsSpaceValid(100, 200)).toEqual(true);
             });
             
-            it("is just over the top edge", function () {
-                expect(arenaController.CheckIsSpaceValid(100, 200)).toEqual(false);
+            it("is just over the North edge", function () {
+                expect(arenaController.CheckIsSpaceValid(100, 201)).toEqual(false);
             });
             
-            it("is on the right edge", function () {
-                expect(arenaController.CheckIsSpaceValid(199, 100)).toEqual(true);
+            it("is on the East edge", function () {
+                expect(arenaController.CheckIsSpaceValid(200, 100)).toEqual(true);
             });
             
-            it("is just over the right edge", function () {
-                expect(arenaController.CheckIsSpaceValid(200, 100)).toEqual(false);
+            it("is just over the East edge", function () {
+                expect(arenaController.CheckIsSpaceValid(201, 100)).toEqual(false);
+            });
+            
+            it("is on the South edge", function () {
+                expect(arenaController.CheckIsSpaceValid(100, 0)).toEqual(true);
+            });
+            
+            it("is just over the South edge", function () {
+                expect(arenaController.CheckIsSpaceValid(100, -1)).toEqual(false);
+            });
+            
+            it("is on the West edge", function () {
+                expect(arenaController.CheckIsSpaceValid(0, 100)).toEqual(true);
+            });
+            
+            it("is just over the West edge", function () {
+                expect(arenaController.CheckIsSpaceValid(-1, 100)).toEqual(false);
             });
         });
         
         describe("Inside of the arena", function () {
-            it("is on the top edge", function () {
+            it("is in the arena", function () {
                 expect(arenaController.CheckIsSpaceValid(50, 150)).toEqual(true);
             });
         });

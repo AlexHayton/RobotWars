@@ -27,7 +27,7 @@ var std = readline.createInterface({
   output: process.stdout
 })
 .on('line', function(lineToParse) {
-  commandParser(lineToParse, debugMode);
+  commandParser(lineToParse, process.write);
 });
 
 commandParser

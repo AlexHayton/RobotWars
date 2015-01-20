@@ -1,3 +1,4 @@
+var util = require('util');
 var arenaController = require("./arenaController.js");
 var RobotModel = require("../models/robot.js");
 var DirectionEnum = require("../models/direction.js");
@@ -9,85 +10,39 @@ var CommandEnum = require("../models/command.js");
 // This module is responsible for manipulating robots.
 
 function validateRobot(robot) {
-    if (!(robot instanceof RobotModel)) {
-        throw new Error("robot is not valid!");
-    }
-    
-    robot.validate(function() {
-        if (!robot.isValid)
-        {
-            //validation failed, dump validation errors to the console
-            console.error(robot.errors);
-            throw new Error(robot.errors.toString());
-        }
-    });
+    RobotModel.validate(robot);
 }
 
-exports.CreateRobot = function (sizeX, sizeY, direction) {
+exports.CreateRobot = function (x, y, direction) {
     var robot = RobotModel.create();
-    robot.sizeX = sizeX;
-    robot.sizeY = sizeY;
-    robot.Direction = direction;
+    robot.x = x;
+    robot.y = y;
+    robot.direction = direction;
     
-    robot.validate(function() {
-        if (!robot.isValid)
-        {
-            //validation failed, dump validation errors to the console
-            console.error(robot.errors);
-        }
-    });
-}
-
-exports.ProcessCommands = function(robot, commands) {
     validateRobot(robot);
-    
-    if (!commands.isArray) {
-        throw new Error("Commands must be an array!");
-    }
-    
-    commands.each(function (command)
-    {
-       if (!command instanceof CommandEnum)
-       {
-            throw new Error("command is invalid");   
-       }
-       
-       switch (command) 
-       {
-            case CommandEnum.Left:
-                this.TurnLeft(robot);
-                break;
-                
-            case CommandEnum.Right:
-                this.TurnRight(robot);
-                break;
-                
-            case CommandEnum.Move:
-                this.Move(robot);
-                break;
-       }
-    });
+    arenaController.AddRobot(robot);
+    return robot;
 }
 
 exports.TurnLeft = function (robot) {
     validateRobot(robot);
     
-    switch (robot.Direction)
+    switch (robot.direction)
     {
         case DirectionEnum.North:
-            robot.Direction = DirectionEnum.West;
+            robot.direction = DirectionEnum.West;
             break;
             
         case DirectionEnum.East:
-            robot.Direction = DirectionEnum.North;
+            robot.direction = DirectionEnum.North;
             break;
             
         case DirectionEnum.South:
-            robot.Direction = DirectionEnum.East;
+            robot.direction = DirectionEnum.East;
             break;
             
         case DirectionEnum.West:
-            robot.Direction = DirectionEnum.South;
+            robot.direction = DirectionEnum.South;
             break;
     }
 }
@@ -95,57 +50,87 @@ exports.TurnLeft = function (robot) {
 exports.TurnRight = function (robot) {
     validateRobot(robot);
     
-    switch (robot.Direction)
+    switch (robot.direction)
     {
         case DirectionEnum.North:
-            robot.Direction = DirectionEnum.East;
+            robot.direction = DirectionEnum.East;
             break;
             
         case DirectionEnum.East:
-            robot.Direction = DirectionEnum.South;
+            robot.direction = DirectionEnum.South;
             break;
             
         case DirectionEnum.South:
-            robot.Direction = DirectionEnum.West;
+            robot.direction = DirectionEnum.West;
             break;
             
         case DirectionEnum.West:
-            robot.Direction = DirectionEnum.North;
+            robot.direction = DirectionEnum.North;
             break;
     }
 }
 
-exports.Move = function(robot, arena) {
+exports.Move = function(robot) {
     validateRobot(robot);
     
-    switch (robot.Direction)
+    switch (robot.direction)
     {
         case DirectionEnum.North:
-            if (arenaController.CheckIsSpaceValid(robot.X, robot.Y+1))
+            if (arenaController.CheckIsSpaceValid(robot.x, robot.y+1))
             {
-                robot.Y++;
+                robot.y++;
             }
             break;
             
         case DirectionEnum.South:
-            if (arenaController.CheckIsSpaceValid(robot.X, robot.Y-1))
+            if (arenaController.CheckIsSpaceValid(robot.x, robot.y-1))
             {
-                robot.Y--;
+                robot.y--;
             }
             break;
             
         case DirectionEnum.East:
-            if (arenaController.CheckIsSpaceValid(robot.X+1, robot.Y))
+            if (arenaController.CheckIsSpaceValid(robot.x+1, robot.y))
             {
-                robot.X++;
+                robot.x++;
             }
             break;
             
         case DirectionEnum.West:
-            if (arenaController.CheckIsSpaceValid(robot.X-1, robot.Y))
+            if (arenaController.CheckIsSpaceValid(robot.x-1, robot.y))
             {
-                robot.X--;
+                robot.x--;
             }
             break;
     }
+}
+
+
+exports.ProcessCommands = function(robot, commands) {
+    validateRobot(robot);
+    
+    if (!util.isArray(commands)) {
+        throw new Error("Commands must be an array!");
+    }
+    
+    commands.forEach(function (command)
+    {
+       switch (command) 
+       {
+            case CommandEnum.Left:
+                exports.TurnLeft(robot);
+                break;
+                
+            case CommandEnum.Right:
+                exports.TurnRight(robot);
+                break;
+                
+            case CommandEnum.Move:
+                exports.Move(robot, arenaController);
+                break;
+            
+            default:
+                throw new Error("command is invalid!");
+       }
+    });
 }

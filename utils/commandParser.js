@@ -18,10 +18,10 @@ var robotController = require("../controllers/robotController.js");
 
 // Invalid user input will result in a warning and is ignored.
 
-module.exports = function(lineToParse) {
+module.exports = function(lineToParse, outputFunction) {
     check.string(lineToParse);
-    
     var validInput = false;
+    
     var arenaRegexMatches = lineToParse.match(arenaRegex);
     if (arenaRegexMatches !== null)
     {
@@ -34,6 +34,7 @@ module.exports = function(lineToParse) {
     var robotRegexMatches = lineToParse.match(robotRegex);
     if (robotRegexMatches !== null)
     {
+        outputFunction("Adding robot...");
         if (!arenaController.ArenaReady()) {
             throw new Error("Arena is not ready, cannot create robot!");
         }
@@ -62,13 +63,15 @@ module.exports = function(lineToParse) {
                 break;
         }
         
-        robotController.CreateRobot(X, Y, direction);
+        var robot = robotController.CreateRobot(X, Y, direction);
+        outputFunction("robot added at X="+X+" Y="+Y+" Direction="+direction.value);
         validInput = true;
     }
     
     var commandRegexMatches = lineToParse.match(commandRegex);
     if (commandRegexMatches !== null)
     {
+        outputFunction("Processing robot command " + lineToParse);
         var robot = arenaController.GetRobotForCommands();
         var rawCommands = lineToParse.split("");
 
@@ -93,6 +96,29 @@ module.exports = function(lineToParse) {
         });
         
         robotController.ProcessCommands(robot, commands);
+        
+        var rawDirection = "N";
+        switch(robot.direction)
+        {
+            case DirectionEnum.North:
+                rawDirection = 'N';
+                break;
+                
+            case DirectionEnum.East:
+                rawDirection = 'E';
+                break;
+                
+            case DirectionEnum.South:
+                rawDirection = 'S';
+                break;
+                
+            case DirectionEnum.West:
+                rawDirection = 'W';
+                break;
+        }
+        outputFunction("New robot position:");
+        outputFunction(robot.x + " " + robot.y + " " + rawDirection);
+        
         validInput = true;
     }
     

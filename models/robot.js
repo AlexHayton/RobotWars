@@ -9,13 +9,14 @@ var DirectionEnum = require("./direction.js");
 // Robots can turn left or right or move forward.
 
 // By default, two robots cannot occupy the same space in the arena.
-
-exports.create = function() {
-    return { 
-        x: 0,
-        y: 0,
-        direction: DirectionEnum.North
-    };
+var RobotModel = { 
+    x: 0,
+    y: 0,
+    direction: DirectionEnum.North
+};
+    
+exports.create = function () {
+    return Object.create(RobotModel);
 };
 
 var constraints = {
@@ -23,14 +24,14 @@ var constraints = {
         presence: true,
         numericality: {
           onlyInteger: true,
-          greaterThan: 0,
+          greaterThanOrEqualTo: 0,
         }
     },
     y: {
         presence: true,
         numericality: {
           onlyInteger: true,
-          greaterThan: 0,
+          greaterThanOrEqualTo: 0,
         }
     },
     direction: {
@@ -49,6 +50,6 @@ var constraints = {
 exports.validate = function(robot) {
     var validationErrors = validate(robot, constraints);
     if (validationErrors) {
-        throw new Error(validationErrors);
+        throw new Error(JSON.stringify(validationErrors));
     }
 }

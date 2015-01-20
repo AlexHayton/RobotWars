@@ -13,6 +13,10 @@ var deferred = require("deferred");
 
 var arena = null;
 
+exports.ResetArena = function() {
+    arena = null;
+}
+
 exports.ArenaReady = function () {
     return arena !== null;
 }
@@ -48,9 +52,9 @@ exports.GetRobotForCommands = function () {
 
 exports.CheckIsSpaceValid = function(X, Y) {
     var isValid = (X >= 0 && 
-                   X < arena.sizeX &&
+                   X <= arena.sizeX &&
                    Y >= 0 &&
-                   Y < arena.sizeY);
+                   Y <= arena.sizeY);
                    
     if (isValid && arena.robotsCollide)
     {

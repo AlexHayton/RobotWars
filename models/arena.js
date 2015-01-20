@@ -11,13 +11,15 @@ var validate = require('validate.js');
 //
 // Robot collision can be switched on or off based on preference.
 
-exports.create = function() {
-    return { 
-        sizeX: 0,
-        sizeY: 0,
-        robots: [],
-        robotsCollide: true
-    };
+var ArenaModel = { 
+    sizeX: 0,
+    sizeY: 0,
+    robots: [],
+    robotsCollide: true
+};
+
+exports.create = function () {
+    return Object.create(ArenaModel);
 };
 
 var constraints = {
@@ -47,6 +49,6 @@ exports.validate = function(arena)
 {
     var validationErrors = validate(arena, constraints);
     if (validationErrors) {
-        throw new Error(validationErrors);
+        throw new Error(JSON.stringify(validationErrors));
     }
 }
