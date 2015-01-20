@@ -11,5 +11,10 @@
     "check-types": "~2.2.0",
     "enum": "~0.2.7",
     "nodejs-model": "~0.1.6"
+  },
+  "docco_husky": {
+    "output_dir": "docs",                   
+    "project_name": "Robot Wars",
+    "show_timestamp": true
   }
 }
