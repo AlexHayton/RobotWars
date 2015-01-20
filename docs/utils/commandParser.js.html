@@ -1,0 +1,124 @@
+<!DOCTYPE html><html><head><title>commandParser.js</title><meta http-equiv="Content-Type" content="text/html" charset="UTF-8"><link rel="stylesheet" media="all" href="../docco.css"></head><body><div id="container"><div id="background"></div><div id="jump_to">Jump To &hellip;<div id="jump_wrapper"><div id="jump_page"><a href="../index.html" class="source"><span class="file_name">README</span></a><a href="../controllers/arenaController.js.html" class="source "><span class="base_path">controllers / </span><span class="file_name">arenaController.js</span></a><a href="../controllers/robotController.js.html" class="source "><span class="base_path">controllers / </span><span class="file_name">robotController.js</span></a><a href="../main.js.html" class="source "><span class="base_path">. / </span><span class="file_name">main.js</span></a><a href="../models/command.js.html" class="source "><span class="base_path">models / </span><span class="file_name">command.js</span></a><a href="../models/robot.js.html" class="source "><span class="base_path">models / </span><span class="file_name">robot.js</span></a><a href="../models/direction.js.html" class="source "><span class="base_path">models / </span><span class="file_name">direction.js</span></a><a href="../models/arena.js.html" class="source "><span class="base_path">models / </span><span class="file_name">arena.js</span></a><a href="../utils/commandParser.js.html" class="source selected"><span class="base_path">utils / </span><span class="file_name">commandParser.js</span></a></div></div></div><table cellpadding="0" cellspacing="0"><thead><tr><th class="docs"><h1>commandParser.js</h1><div class="filepath">utils/</div></th><th class="code"></th></tr></thead><tbody><tr id="section-1"><td class="docs"><div class="pilwrap"><a href="#section-1" class="pilcrow">&#182;</a></div>
+</td><td class="code"><div class="highlight"><pre><span class="kd">var</span> <span class="nx">check</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s2">&quot;check-types&quot;</span><span class="p">);</span>
+
+<span class="kd">var</span> <span class="nx">CommandEnum</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s2">&quot;../models/command.js&quot;</span><span class="p">);</span>
+<span class="kd">var</span> <span class="nx">DirectionEnum</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s2">&quot;../models/direction.js&quot;</span><span class="p">);</span>
+
+<span class="kd">var</span> <span class="nx">arenaRegex</span> <span class="o">=</span> <span class="sr">/^(\d+) (\d+)$/</span><span class="p">;</span>
+<span class="kd">var</span> <span class="nx">robotRegex</span> <span class="o">=</span> <span class="sr">/^(\d+) (\d+) ([NESWnesw])$/</span><span class="p">;</span>
+<span class="kd">var</span> <span class="nx">commandRegex</span> <span class="o">=</span> <span class="sr">/^[LRMlrm]+$/</span><span class="p">;</span>
+
+<span class="kd">var</span> <span class="nx">arenaController</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s2">&quot;../controllers/arenaController.js&quot;</span><span class="p">);</span>
+<span class="kd">var</span> <span class="nx">robotController</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s2">&quot;../controllers/robotController.js&quot;</span><span class="p">);</span></pre></div></td></tr><tr id="section-2"><td class="docs"><div class="pilwrap"><a href="#section-2" class="pilcrow">&#182;</a></div><h2>commandParser module</h2>
+</td><td class="code"><div class="highlight"><pre></pre></div></td></tr><tr id="section-3"><td class="docs"><div class="pilwrap"><a href="#section-3" class="pilcrow">&#182;</a></div><p>The command parser is responsible for taking user input and calling the 
+relevant controller to perform the actions.</p>
+</td><td class="code"><div class="highlight"><pre></pre></div></td></tr><tr id="section-4"><td class="docs"><div class="pilwrap"><a href="#section-4" class="pilcrow">&#182;</a></div><p>Invalid user input will result in a warning and is ignored.</p>
+</td><td class="code"><div class="highlight"><pre><span class="nx">module</span><span class="p">.</span><span class="nx">exports</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">lineToParse</span><span class="p">,</span> <span class="nx">outputFunction</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">check</span><span class="p">.</span><span class="nx">string</span><span class="p">(</span><span class="nx">lineToParse</span><span class="p">);</span>
+    <span class="kd">var</span> <span class="nx">validInput</span> <span class="o">=</span> <span class="kc">false</span><span class="p">;</span>
+    
+    <span class="kd">var</span> <span class="nx">arenaRegexMatches</span> <span class="o">=</span> <span class="nx">lineToParse</span><span class="p">.</span><span class="nx">match</span><span class="p">(</span><span class="nx">arenaRegex</span><span class="p">);</span>
+    <span class="k">if</span> <span class="p">(</span><span class="nx">arenaRegexMatches</span> <span class="o">!==</span> <span class="kc">null</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="kd">var</span> <span class="nx">sizeX</span> <span class="o">=</span> <span class="nb">Number</span><span class="p">(</span><span class="nx">arenaRegexMatches</span><span class="p">[</span><span class="mi">1</span><span class="p">]);</span>
+        <span class="kd">var</span> <span class="nx">sizeY</span> <span class="o">=</span> <span class="nb">Number</span><span class="p">(</span><span class="nx">arenaRegexMatches</span><span class="p">[</span><span class="mi">2</span><span class="p">]);</span>
+        <span class="nx">arenaController</span><span class="p">.</span><span class="nx">CreateArena</span><span class="p">(</span><span class="nx">sizeX</span><span class="p">,</span> <span class="nx">sizeY</span><span class="p">);</span>
+        <span class="nx">validInput</span> <span class="o">=</span> <span class="kc">true</span><span class="p">;</span>
+    <span class="p">}</span>
+    
+    <span class="kd">var</span> <span class="nx">robotRegexMatches</span> <span class="o">=</span> <span class="nx">lineToParse</span><span class="p">.</span><span class="nx">match</span><span class="p">(</span><span class="nx">robotRegex</span><span class="p">);</span>
+    <span class="k">if</span> <span class="p">(</span><span class="nx">robotRegexMatches</span> <span class="o">!==</span> <span class="kc">null</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="nx">outputFunction</span><span class="p">(</span><span class="s2">&quot;Adding robot...&quot;</span><span class="p">);</span>
+        <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">arenaController</span><span class="p">.</span><span class="nx">ArenaReady</span><span class="p">())</span> <span class="p">{</span>
+            <span class="k">throw</span> <span class="k">new</span> <span class="nb">Error</span><span class="p">(</span><span class="s2">&quot;Arena is not ready, cannot create robot!&quot;</span><span class="p">);</span>
+        <span class="p">}</span>
+        
+        <span class="kd">var</span> <span class="nx">X</span> <span class="o">=</span> <span class="nb">Number</span><span class="p">(</span><span class="nx">robotRegexMatches</span><span class="p">[</span><span class="mi">1</span><span class="p">]);</span>
+        <span class="kd">var</span> <span class="nx">Y</span> <span class="o">=</span> <span class="nb">Number</span><span class="p">(</span><span class="nx">robotRegexMatches</span><span class="p">[</span><span class="mi">2</span><span class="p">]);</span>
+        <span class="kd">var</span> <span class="nx">rawDirection</span> <span class="o">=</span> <span class="nx">robotRegexMatches</span><span class="p">[</span><span class="mi">3</span><span class="p">];</span>
+        <span class="kd">var</span> <span class="nx">direction</span> <span class="o">=</span> <span class="nx">DirectionEnum</span><span class="p">.</span><span class="nx">North</span><span class="p">;</span>
+        
+        <span class="k">switch</span> <span class="p">(</span><span class="nx">rawDirection</span><span class="p">.</span><span class="nx">toUpperCase</span><span class="p">())</span>
+        <span class="p">{</span>
+            <span class="k">case</span> <span class="s1">&#39;N&#39;</span><span class="o">:</span>
+                <span class="nx">direction</span> <span class="o">=</span> <span class="nx">DirectionEnum</span><span class="p">.</span><span class="nx">North</span><span class="p">;</span>
+                <span class="k">break</span><span class="p">;</span>
+                
+            <span class="k">case</span> <span class="s1">&#39;E&#39;</span><span class="o">:</span>
+                <span class="nx">direction</span> <span class="o">=</span> <span class="nx">DirectionEnum</span><span class="p">.</span><span class="nx">East</span><span class="p">;</span>
+                <span class="k">break</span><span class="p">;</span>
+                
+            <span class="k">case</span> <span class="s1">&#39;S&#39;</span><span class="o">:</span>
+                <span class="nx">direction</span> <span class="o">=</span> <span class="nx">DirectionEnum</span><span class="p">.</span><span class="nx">South</span><span class="p">;</span>
+                <span class="k">break</span><span class="p">;</span>
+                
+            <span class="k">case</span> <span class="s1">&#39;W&#39;</span><span class="o">:</span>
+                <span class="nx">direction</span> <span class="o">=</span> <span class="nx">DirectionEnum</span><span class="p">.</span><span class="nx">West</span><span class="p">;</span>
+                <span class="k">break</span><span class="p">;</span>
+        <span class="p">}</span>
+        
+        <span class="kd">var</span> <span class="nx">robot</span> <span class="o">=</span> <span class="nx">robotController</span><span class="p">.</span><span class="nx">CreateRobot</span><span class="p">(</span><span class="nx">X</span><span class="p">,</span> <span class="nx">Y</span><span class="p">,</span> <span class="nx">direction</span><span class="p">);</span>
+        <span class="nx">outputFunction</span><span class="p">(</span><span class="s2">&quot;robot added at X=&quot;</span><span class="o">+</span><span class="nx">X</span><span class="o">+</span><span class="s2">&quot; Y=&quot;</span><span class="o">+</span><span class="nx">Y</span><span class="o">+</span><span class="s2">&quot; Direction=&quot;</span><span class="o">+</span><span class="nx">direction</span><span class="p">.</span><span class="nx">value</span><span class="p">);</span>
+        <span class="nx">validInput</span> <span class="o">=</span> <span class="kc">true</span><span class="p">;</span>
+    <span class="p">}</span>
+    
+    <span class="kd">var</span> <span class="nx">commandRegexMatches</span> <span class="o">=</span> <span class="nx">lineToParse</span><span class="p">.</span><span class="nx">match</span><span class="p">(</span><span class="nx">commandRegex</span><span class="p">);</span>
+    <span class="k">if</span> <span class="p">(</span><span class="nx">commandRegexMatches</span> <span class="o">!==</span> <span class="kc">null</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="nx">outputFunction</span><span class="p">(</span><span class="s2">&quot;Processing robot command &quot;</span> <span class="o">+</span> <span class="nx">lineToParse</span><span class="p">);</span>
+        <span class="kd">var</span> <span class="nx">robot</span> <span class="o">=</span> <span class="nx">arenaController</span><span class="p">.</span><span class="nx">GetRobotForCommands</span><span class="p">();</span>
+        <span class="kd">var</span> <span class="nx">rawCommands</span> <span class="o">=</span> <span class="nx">lineToParse</span><span class="p">.</span><span class="nx">split</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">);</span></pre></div></td></tr><tr id="section-5"><td class="docs"><div class="pilwrap"><a href="#section-5" class="pilcrow">&#182;</a></div><p>Translate the string commands to our internal representation.</p>
+</td><td class="code"><div class="highlight"><pre>        <span class="kd">var</span> <span class="nx">commands</span> <span class="o">=</span> <span class="nx">rawCommands</span><span class="p">.</span><span class="nx">map</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">rawCommand</span><span class="p">)</span> <span class="p">{</span>
+            <span class="kd">var</span> <span class="nx">command</span> <span class="o">=</span> <span class="kc">null</span><span class="p">;</span>
+            <span class="k">switch</span> <span class="p">(</span><span class="nx">rawCommand</span><span class="p">)</span> <span class="p">{</span>
+                <span class="k">case</span> <span class="s2">&quot;L&quot;</span><span class="o">:</span>
+                    <span class="nx">command</span> <span class="o">=</span> <span class="nx">CommandEnum</span><span class="p">.</span><span class="nx">Left</span><span class="p">;</span>
+                    <span class="k">break</span><span class="p">;</span>
+               
+                <span class="k">case</span> <span class="s2">&quot;R&quot;</span><span class="o">:</span>
+                    <span class="nx">command</span> <span class="o">=</span> <span class="nx">CommandEnum</span><span class="p">.</span><span class="nx">Right</span><span class="p">;</span>
+                    <span class="k">break</span><span class="p">;</span>
+                   
+                <span class="k">case</span> <span class="s2">&quot;M&quot;</span><span class="o">:</span>
+                    <span class="nx">command</span> <span class="o">=</span> <span class="nx">CommandEnum</span><span class="p">.</span><span class="nx">Move</span><span class="p">;</span>
+                    <span class="k">break</span><span class="p">;</span>
+           <span class="p">}</span>
+           
+           <span class="k">return</span> <span class="nx">command</span><span class="p">;</span>
+        <span class="p">});</span>
+        
+        <span class="nx">robotController</span><span class="p">.</span><span class="nx">ProcessCommands</span><span class="p">(</span><span class="nx">robot</span><span class="p">,</span> <span class="nx">commands</span><span class="p">);</span>
+        
+        <span class="kd">var</span> <span class="nx">rawDirection</span> <span class="o">=</span> <span class="s2">&quot;N&quot;</span><span class="p">;</span>
+        <span class="k">switch</span><span class="p">(</span><span class="nx">robot</span><span class="p">.</span><span class="nx">direction</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="k">case</span> <span class="nx">DirectionEnum</span><span class="p">.</span><span class="nx">North</span><span class="o">:</span>
+                <span class="nx">rawDirection</span> <span class="o">=</span> <span class="s1">&#39;N&#39;</span><span class="p">;</span>
+                <span class="k">break</span><span class="p">;</span>
+                
+            <span class="k">case</span> <span class="nx">DirectionEnum</span><span class="p">.</span><span class="nx">East</span><span class="o">:</span>
+                <span class="nx">rawDirection</span> <span class="o">=</span> <span class="s1">&#39;E&#39;</span><span class="p">;</span>
+                <span class="k">break</span><span class="p">;</span>
+                
+            <span class="k">case</span> <span class="nx">DirectionEnum</span><span class="p">.</span><span class="nx">South</span><span class="o">:</span>
+                <span class="nx">rawDirection</span> <span class="o">=</span> <span class="s1">&#39;S&#39;</span><span class="p">;</span>
+                <span class="k">break</span><span class="p">;</span>
+                
+            <span class="k">case</span> <span class="nx">DirectionEnum</span><span class="p">.</span><span class="nx">West</span><span class="o">:</span>
+                <span class="nx">rawDirection</span> <span class="o">=</span> <span class="s1">&#39;W&#39;</span><span class="p">;</span>
+                <span class="k">break</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="nx">outputFunction</span><span class="p">(</span><span class="s2">&quot;New robot position:&quot;</span><span class="p">);</span>
+        <span class="nx">outputFunction</span><span class="p">(</span><span class="nx">robot</span><span class="p">.</span><span class="nx">x</span> <span class="o">+</span> <span class="s2">&quot; &quot;</span> <span class="o">+</span> <span class="nx">robot</span><span class="p">.</span><span class="nx">y</span> <span class="o">+</span> <span class="s2">&quot; &quot;</span> <span class="o">+</span> <span class="nx">rawDirection</span><span class="p">);</span>
+        
+        <span class="nx">validInput</span> <span class="o">=</span> <span class="kc">true</span><span class="p">;</span>
+    <span class="p">}</span>
+    
+    <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">validInput</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="k">throw</span> <span class="k">new</span> <span class="nb">Error</span><span class="p">(</span><span class="s2">&quot;Invalid Input!&quot;</span><span class="p">);</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+</pre></div></td></tr></tbody></table><div id="generated">generated Tue Jan 20 2015 17:09:41 GMT+0000 (UTC)  </div><div id="projectname"><a href="../index.html">Robot Wars</a></div></div></body></html>

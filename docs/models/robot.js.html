@@ -1,0 +1,53 @@
+<!DOCTYPE html><html><head><title>robot.js</title><meta http-equiv="Content-Type" content="text/html" charset="UTF-8"><link rel="stylesheet" media="all" href="../docco.css"></head><body><div id="container"><div id="background"></div><div id="jump_to">Jump To &hellip;<div id="jump_wrapper"><div id="jump_page"><a href="../index.html" class="source"><span class="file_name">README</span></a><a href="../controllers/arenaController.js.html" class="source "><span class="base_path">controllers / </span><span class="file_name">arenaController.js</span></a><a href="../controllers/robotController.js.html" class="source "><span class="base_path">controllers / </span><span class="file_name">robotController.js</span></a><a href="../main.js.html" class="source "><span class="base_path">. / </span><span class="file_name">main.js</span></a><a href="../models/command.js.html" class="source "><span class="base_path">models / </span><span class="file_name">command.js</span></a><a href="../models/robot.js.html" class="source selected"><span class="base_path">models / </span><span class="file_name">robot.js</span></a><a href="../models/direction.js.html" class="source "><span class="base_path">models / </span><span class="file_name">direction.js</span></a><a href="../models/arena.js.html" class="source "><span class="base_path">models / </span><span class="file_name">arena.js</span></a><a href="../utils/commandParser.js.html" class="source "><span class="base_path">utils / </span><span class="file_name">commandParser.js</span></a></div></div></div><table cellpadding="0" cellspacing="0"><thead><tr><th class="docs"><h1>robot.js</h1><div class="filepath">models/</div></th><th class="code"></th></tr></thead><tbody><tr id="section-1"><td class="docs"><div class="pilwrap"><a href="#section-1" class="pilcrow">&#182;</a></div>
+</td><td class="code"><div class="highlight"><pre><span class="kd">var</span> <span class="nx">validate</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;validate.js&#39;</span><span class="p">);</span>
+<span class="kd">var</span> <span class="nx">DirectionEnum</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s2">&quot;./direction.js&quot;</span><span class="p">);</span></pre></div></td></tr><tr id="section-2"><td class="docs"><div class="pilwrap"><a href="#section-2" class="pilcrow">&#182;</a></div><h2>Robot model</h2>
+</td><td class="code"><div class="highlight"><pre></pre></div></td></tr><tr id="section-3"><td class="docs"><div class="pilwrap"><a href="#section-3" class="pilcrow">&#182;</a></div><p>This model represents a robot which sits in the arena.
+Robots have an X and Y coordinate in arena-space.
+Robots can turn left or right or move forward.</p>
+</td><td class="code"><div class="highlight"><pre></pre></div></td></tr><tr id="section-4"><td class="docs"><div class="pilwrap"><a href="#section-4" class="pilcrow">&#182;</a></div><p>By default, two robots cannot occupy the same space in the arena.</p>
+</td><td class="code"><div class="highlight"><pre><span class="kd">var</span> <span class="nx">RobotModel</span> <span class="o">=</span> <span class="p">{</span> 
+    <span class="nx">x</span><span class="o">:</span> <span class="mi">0</span><span class="p">,</span>
+    <span class="nx">y</span><span class="o">:</span> <span class="mi">0</span><span class="p">,</span>
+    <span class="nx">direction</span><span class="o">:</span> <span class="nx">DirectionEnum</span><span class="p">.</span><span class="nx">North</span>
+<span class="p">};</span>
+    
+<span class="nx">exports</span><span class="p">.</span><span class="nx">create</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="nb">Object</span><span class="p">.</span><span class="nx">create</span><span class="p">(</span><span class="nx">RobotModel</span><span class="p">);</span>
+<span class="p">};</span>
+
+<span class="kd">var</span> <span class="nx">constraints</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="nx">x</span><span class="o">:</span> <span class="p">{</span>
+        <span class="nx">presence</span><span class="o">:</span> <span class="kc">true</span><span class="p">,</span>
+        <span class="nx">numericality</span><span class="o">:</span> <span class="p">{</span>
+          <span class="nx">onlyInteger</span><span class="o">:</span> <span class="kc">true</span><span class="p">,</span>
+          <span class="nx">greaterThanOrEqualTo</span><span class="o">:</span> <span class="mi">0</span><span class="p">,</span>
+        <span class="p">}</span>
+    <span class="p">},</span>
+    <span class="nx">y</span><span class="o">:</span> <span class="p">{</span>
+        <span class="nx">presence</span><span class="o">:</span> <span class="kc">true</span><span class="p">,</span>
+        <span class="nx">numericality</span><span class="o">:</span> <span class="p">{</span>
+          <span class="nx">onlyInteger</span><span class="o">:</span> <span class="kc">true</span><span class="p">,</span>
+          <span class="nx">greaterThanOrEqualTo</span><span class="o">:</span> <span class="mi">0</span><span class="p">,</span>
+        <span class="p">}</span>
+    <span class="p">},</span>
+    <span class="nx">direction</span><span class="o">:</span> <span class="p">{</span>
+        <span class="nx">presence</span><span class="o">:</span> <span class="kc">true</span><span class="p">,</span>
+        <span class="nx">inclusion</span><span class="o">:</span> <span class="p">{</span>
+            <span class="nx">within</span><span class="o">:</span> <span class="p">{</span>
+                <span class="s2">&quot;North&quot;</span><span class="o">:</span> <span class="nx">DirectionEnum</span><span class="p">.</span><span class="nx">North</span><span class="p">,</span> 
+                <span class="s2">&quot;East&quot;</span><span class="o">:</span> <span class="nx">DirectionEnum</span><span class="p">.</span><span class="nx">East</span><span class="p">,</span>
+                <span class="s2">&quot;South&quot;</span><span class="o">:</span> <span class="nx">DirectionEnum</span><span class="p">.</span><span class="nx">South</span><span class="p">,</span>
+                <span class="s2">&quot;West&quot;</span><span class="o">:</span> <span class="nx">DirectionEnum</span><span class="p">.</span><span class="nx">West</span><span class="p">,</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+    <span class="p">},</span>
+<span class="p">}</span>
+
+<span class="nx">exports</span><span class="p">.</span><span class="nx">validate</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">robot</span><span class="p">)</span> <span class="p">{</span>
+    <span class="kd">var</span> <span class="nx">validationErrors</span> <span class="o">=</span> <span class="nx">validate</span><span class="p">(</span><span class="nx">robot</span><span class="p">,</span> <span class="nx">constraints</span><span class="p">);</span>
+    <span class="k">if</span> <span class="p">(</span><span class="nx">validationErrors</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">throw</span> <span class="k">new</span> <span class="nb">Error</span><span class="p">(</span><span class="nx">JSON</span><span class="p">.</span><span class="nx">stringify</span><span class="p">(</span><span class="nx">validationErrors</span><span class="p">));</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+</pre></div></td></tr></tbody></table><div id="generated">generated Tue Jan 20 2015 17:09:40 GMT+0000 (UTC)  </div><div id="projectname"><a href="../index.html">Robot Wars</a></div></div></body></html>

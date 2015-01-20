@@ -1,0 +1,64 @@
+<!DOCTYPE html><html><head><title>arenaController.js</title><meta http-equiv="Content-Type" content="text/html" charset="UTF-8"><link rel="stylesheet" media="all" href="../docco.css"></head><body><div id="container"><div id="background"></div><div id="jump_to">Jump To &hellip;<div id="jump_wrapper"><div id="jump_page"><a href="../index.html" class="source"><span class="file_name">README</span></a><a href="../controllers/arenaController.js.html" class="source selected"><span class="base_path">controllers / </span><span class="file_name">arenaController.js</span></a><a href="../controllers/robotController.js.html" class="source "><span class="base_path">controllers / </span><span class="file_name">robotController.js</span></a><a href="../main.js.html" class="source "><span class="base_path">. / </span><span class="file_name">main.js</span></a><a href="../models/command.js.html" class="source "><span class="base_path">models / </span><span class="file_name">command.js</span></a><a href="../models/robot.js.html" class="source "><span class="base_path">models / </span><span class="file_name">robot.js</span></a><a href="../models/direction.js.html" class="source "><span class="base_path">models / </span><span class="file_name">direction.js</span></a><a href="../models/arena.js.html" class="source "><span class="base_path">models / </span><span class="file_name">arena.js</span></a><a href="../utils/commandParser.js.html" class="source "><span class="base_path">utils / </span><span class="file_name">commandParser.js</span></a></div></div></div><table cellpadding="0" cellspacing="0"><thead><tr><th class="docs"><h1>arenaController.js</h1><div class="filepath">controllers/</div></th><th class="code"></th></tr></thead><tbody><tr id="section-1"><td class="docs"><div class="pilwrap"><a href="#section-1" class="pilcrow">&#182;</a></div>
+</td><td class="code"><div class="highlight"><pre><span class="kd">var</span> <span class="nx">ArenaModel</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s2">&quot;../models/arena.js&quot;</span><span class="p">);</span>
+<span class="kd">var</span> <span class="nx">deferred</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s2">&quot;deferred&quot;</span><span class="p">);</span></pre></div></td></tr><tr id="section-2"><td class="docs"><div class="pilwrap"><a href="#section-2" class="pilcrow">&#182;</a></div><h2>arenaController</h2>
+</td><td class="code"><div class="highlight"><pre></pre></div></td></tr><tr id="section-3"><td class="docs"><div class="pilwrap"><a href="#section-3" class="pilcrow">&#182;</a></div><p>This module is responsible for managing and manipulating the arena data.
+It contains a singleton Arena reference which can have robots added.</p>
+
+<p>The arena is a fixed size, with [0,0] being the bottom-left. 
+By default, robots cannot collide with one another but there is an option
+to allow two robots to occupy the same space.</p>
+</td><td class="code"><div class="highlight"><pre><span class="kd">var</span> <span class="nx">arena</span> <span class="o">=</span> <span class="kc">null</span><span class="p">;</span>
+
+<span class="nx">exports</span><span class="p">.</span><span class="nx">ResetArena</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+    <span class="nx">arena</span> <span class="o">=</span> <span class="kc">null</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="nx">exports</span><span class="p">.</span><span class="nx">ArenaReady</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="nx">arena</span> <span class="o">!==</span> <span class="kc">null</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="nx">exports</span><span class="p">.</span><span class="nx">CreateArena</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">sizeX</span><span class="p">,</span> <span class="nx">sizeY</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">arena</span> <span class="o">=</span> <span class="nx">ArenaModel</span><span class="p">.</span><span class="nx">create</span><span class="p">();</span>
+    <span class="nx">arena</span><span class="p">.</span><span class="nx">sizeX</span> <span class="o">=</span> <span class="nx">sizeX</span><span class="p">;</span>
+    <span class="nx">arena</span><span class="p">.</span><span class="nx">sizeY</span> <span class="o">=</span> <span class="nx">sizeY</span><span class="p">;</span>
+    <span class="nx">arena</span><span class="p">.</span><span class="nx">robots</span> <span class="o">=</span> <span class="p">[];</span>
+    <span class="nx">arena</span><span class="p">.</span><span class="nx">robotsCollide</span> <span class="o">=</span> <span class="kc">true</span><span class="p">;</span>
+    
+    <span class="nx">ArenaModel</span><span class="p">.</span><span class="nx">validate</span><span class="p">(</span><span class="nx">arena</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="nx">exports</span><span class="p">.</span><span class="nx">AddRobot</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">robot</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">arena</span><span class="p">.</span><span class="nx">robots</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="nx">robot</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="nx">exports</span><span class="p">.</span><span class="nx">GetRobotForCommands</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="nx">arena</span><span class="p">.</span><span class="nx">robots</span><span class="p">.</span><span class="nx">length</span> <span class="o">===</span> <span class="mi">0</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="k">throw</span> <span class="k">new</span> <span class="nb">Error</span><span class="p">(</span><span class="s2">&quot;arena has no robots!&quot;</span><span class="p">);</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="nx">arena</span><span class="p">.</span><span class="nx">robots</span><span class="p">[</span><span class="nx">arena</span><span class="p">.</span><span class="nx">robots</span><span class="p">.</span><span class="nx">length</span> <span class="o">-</span> <span class="mi">1</span><span class="p">];</span>
+<span class="p">}</span></pre></div></td></tr><tr id="section-4"><td class="docs"><div class="pilwrap"><a href="#section-4" class="pilcrow">&#182;</a></div><h2>CheckIsSpaceValid</h2>
+</td><td class="code"><div class="highlight"><pre></pre></div></td></tr><tr id="section-5"><td class="docs"><div class="pilwrap"><a href="#section-5" class="pilcrow">&#182;</a></div><p>This function validates whether a robot can occupy a given space.
+If the position lies outside of the arena or is already occupied
+by a robot, it is not a valid space.</p>
+</td><td class="code"><div class="highlight"><pre><span class="nx">exports</span><span class="p">.</span><span class="nx">CheckIsSpaceValid</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">X</span><span class="p">,</span> <span class="nx">Y</span><span class="p">)</span> <span class="p">{</span>
+    <span class="kd">var</span> <span class="nx">isValid</span> <span class="o">=</span> <span class="p">(</span><span class="nx">X</span> <span class="o">&gt;=</span> <span class="mi">0</span> <span class="o">&amp;&amp;</span> 
+                   <span class="nx">X</span> <span class="o">&lt;=</span> <span class="nx">arena</span><span class="p">.</span><span class="nx">sizeX</span> <span class="o">&amp;&amp;</span>
+                   <span class="nx">Y</span> <span class="o">&gt;=</span> <span class="mi">0</span> <span class="o">&amp;&amp;</span>
+                   <span class="nx">Y</span> <span class="o">&lt;=</span> <span class="nx">arena</span><span class="p">.</span><span class="nx">sizeY</span><span class="p">);</span>
+                   
+    <span class="k">if</span> <span class="p">(</span><span class="nx">isValid</span> <span class="o">&amp;&amp;</span> <span class="nx">arena</span><span class="p">.</span><span class="nx">robotsCollide</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="nx">arena</span><span class="p">.</span><span class="nx">robots</span><span class="p">.</span><span class="nx">forEach</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">robot</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">if</span> <span class="p">(</span><span class="nx">robot</span><span class="p">.</span><span class="nx">x</span> <span class="o">==</span> <span class="nx">X</span> <span class="o">&amp;&amp;</span> <span class="nx">robot</span><span class="p">.</span><span class="nx">y</span> <span class="o">==</span> <span class="nx">Y</span><span class="p">)</span>
+            <span class="p">{</span>
+                <span class="nx">isValid</span> <span class="o">=</span> <span class="kc">false</span><span class="p">;</span>
+                <span class="k">return</span> <span class="kc">false</span><span class="p">;</span>
+            <span class="p">}</span>
+        <span class="p">});</span>
+    <span class="p">}</span>
+    
+    <span class="k">return</span> <span class="nx">isValid</span><span class="p">;</span>
+<span class="p">}</span>
+
+</pre></div></td></tr></tbody></table><div id="generated">generated Tue Jan 20 2015 17:09:39 GMT+0000 (UTC)  </div><div id="projectname"><a href="../index.html">Robot Wars</a></div></div></body></html>
