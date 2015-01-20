@@ -13,13 +13,17 @@ var deferred = require("deferred");
 
 var arena = null;
 
-exports.ResetArena = function() {
-    arena = null;
-}
+// ArenaReady
+// ----------
+// Have we defined the width and height of the arena yet?
 
 exports.ArenaReady = function () {
     return arena !== null;
 }
+
+// CreateArena
+// ----------
+// Called after the user types in the arena width and height.
 
 exports.CreateArena = function (sizeX, sizeY) {
     arena = ArenaModel.create();
@@ -31,9 +35,18 @@ exports.CreateArena = function (sizeX, sizeY) {
     ArenaModel.validate(arena);
 }
 
+// AddRobot
+// ----------
+// Adds a robot to the arena. This will be the robot that next receives commands
+
 exports.AddRobot = function (robot) {
     arena.robots.push(robot);
 }
+
+// GetRobotForCommands
+// ----------
+// Gets the robot that was most recently added to the arena
+// Commands are typically issued to the most recent robot.
 
 exports.GetRobotForCommands = function () {
     if (arena.robots.length === 0)
@@ -68,4 +81,12 @@ exports.CheckIsSpaceValid = function(X, Y) {
     }
     
     return isValid;
+}
+
+// ResetArena
+// ----------
+// Used for testing purposes
+
+exports.ResetArena = function() {
+    arena = null;
 }

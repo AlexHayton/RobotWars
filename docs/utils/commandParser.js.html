@@ -16,7 +16,9 @@ relevant controller to perform the actions.</p>
 </td><td class="code"><div class="highlight"><pre><span class="nx">module</span><span class="p">.</span><span class="nx">exports</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">lineToParse</span><span class="p">,</span> <span class="nx">outputFunction</span><span class="p">)</span> <span class="p">{</span>
     <span class="nx">check</span><span class="p">.</span><span class="nx">string</span><span class="p">(</span><span class="nx">lineToParse</span><span class="p">);</span>
     <span class="kd">var</span> <span class="nx">validInput</span> <span class="o">=</span> <span class="kc">false</span><span class="p">;</span>
-    
+    </pre></div></td></tr><tr id="section-5"><td class="docs"><div class="pilwrap"><a href="#section-5" class="pilcrow">&#182;</a></div><p>Check for arena commands
+Arena commands are typically</p>
+</td><td class="code"><div class="highlight"><pre>    
     <span class="kd">var</span> <span class="nx">arenaRegexMatches</span> <span class="o">=</span> <span class="nx">lineToParse</span><span class="p">.</span><span class="nx">match</span><span class="p">(</span><span class="nx">arenaRegex</span><span class="p">);</span>
     <span class="k">if</span> <span class="p">(</span><span class="nx">arenaRegexMatches</span> <span class="o">!==</span> <span class="kc">null</span><span class="p">)</span>
     <span class="p">{</span>
@@ -24,6 +26,8 @@ relevant controller to perform the actions.</p>
         <span class="kd">var</span> <span class="nx">sizeY</span> <span class="o">=</span> <span class="nb">Number</span><span class="p">(</span><span class="nx">arenaRegexMatches</span><span class="p">[</span><span class="mi">2</span><span class="p">]);</span>
         <span class="nx">arenaController</span><span class="p">.</span><span class="nx">CreateArena</span><span class="p">(</span><span class="nx">sizeX</span><span class="p">,</span> <span class="nx">sizeY</span><span class="p">);</span>
         <span class="nx">validInput</span> <span class="o">=</span> <span class="kc">true</span><span class="p">;</span>
+        <span class="nx">outputFunction</span><span class="p">(</span><span class="s2">&quot;Setting the arena size to &quot;</span> <span class="o">+</span> <span class="nx">sizeX</span> <span class="o">+</span> <span class="s2">&quot; x &quot;</span> <span class="o">+</span> <span class="nx">sizeY</span><span class="p">);</span>
+        <span class="nx">outputFunction</span><span class="p">(</span><span class="s2">&quot;Please now add some robots, in the format &#39;X Y Direction&#39; e.g. &#39;1 2 N&#39;&quot;</span><span class="p">);</span>
     <span class="p">}</span>
     
     <span class="kd">var</span> <span class="nx">robotRegexMatches</span> <span class="o">=</span> <span class="nx">lineToParse</span><span class="p">.</span><span class="nx">match</span><span class="p">(</span><span class="nx">robotRegex</span><span class="p">);</span>
@@ -59,7 +63,8 @@ relevant controller to perform the actions.</p>
         <span class="p">}</span>
         
         <span class="kd">var</span> <span class="nx">robot</span> <span class="o">=</span> <span class="nx">robotController</span><span class="p">.</span><span class="nx">CreateRobot</span><span class="p">(</span><span class="nx">X</span><span class="p">,</span> <span class="nx">Y</span><span class="p">,</span> <span class="nx">direction</span><span class="p">);</span>
-        <span class="nx">outputFunction</span><span class="p">(</span><span class="s2">&quot;robot added at X=&quot;</span><span class="o">+</span><span class="nx">X</span><span class="o">+</span><span class="s2">&quot; Y=&quot;</span><span class="o">+</span><span class="nx">Y</span><span class="o">+</span><span class="s2">&quot; Direction=&quot;</span><span class="o">+</span><span class="nx">direction</span><span class="p">.</span><span class="nx">value</span><span class="p">);</span>
+        <span class="nx">outputFunction</span><span class="p">(</span><span class="s2">&quot;Robot added at X=&quot;</span><span class="o">+</span><span class="nx">X</span><span class="o">+</span><span class="s2">&quot; Y=&quot;</span><span class="o">+</span><span class="nx">Y</span><span class="o">+</span><span class="s2">&quot; Direction=&quot;</span><span class="o">+</span><span class="nx">direction</span><span class="p">.</span><span class="nx">key</span><span class="p">);</span>
+        <span class="nx">outputFunction</span><span class="p">(</span><span class="s2">&quot;Awaiting move commands. Valid commands are [L]eft, [R]ight or [M]ove e.g. &#39;LMMRMM&#39;&quot;</span><span class="p">);</span>
         <span class="nx">validInput</span> <span class="o">=</span> <span class="kc">true</span><span class="p">;</span>
     <span class="p">}</span>
     
@@ -68,7 +73,7 @@ relevant controller to perform the actions.</p>
     <span class="p">{</span>
         <span class="nx">outputFunction</span><span class="p">(</span><span class="s2">&quot;Processing robot command &quot;</span> <span class="o">+</span> <span class="nx">lineToParse</span><span class="p">);</span>
         <span class="kd">var</span> <span class="nx">robot</span> <span class="o">=</span> <span class="nx">arenaController</span><span class="p">.</span><span class="nx">GetRobotForCommands</span><span class="p">();</span>
-        <span class="kd">var</span> <span class="nx">rawCommands</span> <span class="o">=</span> <span class="nx">lineToParse</span><span class="p">.</span><span class="nx">split</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">);</span></pre></div></td></tr><tr id="section-5"><td class="docs"><div class="pilwrap"><a href="#section-5" class="pilcrow">&#182;</a></div><p>Translate the string commands to our internal representation.</p>
+        <span class="kd">var</span> <span class="nx">rawCommands</span> <span class="o">=</span> <span class="nx">lineToParse</span><span class="p">.</span><span class="nx">split</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">);</span></pre></div></td></tr><tr id="section-6"><td class="docs"><div class="pilwrap"><a href="#section-6" class="pilcrow">&#182;</a></div><p>Translate the string commands to our internal representation.</p>
 </td><td class="code"><div class="highlight"><pre>        <span class="kd">var</span> <span class="nx">commands</span> <span class="o">=</span> <span class="nx">rawCommands</span><span class="p">.</span><span class="nx">map</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">rawCommand</span><span class="p">)</span> <span class="p">{</span>
             <span class="kd">var</span> <span class="nx">command</span> <span class="o">=</span> <span class="kc">null</span><span class="p">;</span>
             <span class="k">switch</span> <span class="p">(</span><span class="nx">rawCommand</span><span class="p">)</span> <span class="p">{</span>
@@ -121,4 +126,4 @@ relevant controller to perform the actions.</p>
     <span class="p">}</span>
 <span class="p">}</span>
 
-</pre></div></td></tr></tbody></table><div id="generated">generated Tue Jan 20 2015 17:09:41 GMT+0000 (UTC)  </div><div id="projectname"><a href="../index.html">Robot Wars</a></div></div></body></html>
+</pre></div></td></tr></tbody></table><div id="generated">generated Tue Jan 20 2015 23:38:08 GMT+0000 (UTC)  </div><div id="projectname"><a href="../index.html">Robot Wars</a></div></div></body></html>

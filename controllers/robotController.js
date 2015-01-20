@@ -13,6 +13,12 @@ function validateRobot(robot) {
     RobotModel.validate(robot);
 }
 
+// CreateRobot
+// -----------
+// 
+// Creates a robot at the specified coordinates and facing in a certain direction
+// The direction must be one of the direction enum types (DirectionEnum.North, South etc.)
+
 exports.CreateRobot = function (x, y, direction) {
     var robot = RobotModel.create();
     robot.x = x;
@@ -23,6 +29,12 @@ exports.CreateRobot = function (x, y, direction) {
     arenaController.AddRobot(robot);
     return robot;
 }
+
+// TurnLeft
+// --------
+//
+// This turns the passed-in robot 90 degrees to the left. 
+// Position is not affected.
 
 exports.TurnLeft = function (robot) {
     validateRobot(robot);
@@ -47,6 +59,12 @@ exports.TurnLeft = function (robot) {
     }
 }
 
+// TurnRight
+// --------
+//
+// This turns the passed-in robot 90 degrees to the right. 
+// Position is not affected.
+
 exports.TurnRight = function (robot) {
     validateRobot(robot);
     
@@ -69,6 +87,12 @@ exports.TurnRight = function (robot) {
             break;
     }
 }
+
+// Move
+// --------
+//
+// This moves the robot forward by one unit along its direction of travel, if possible. 
+// Direction is not affected.
 
 exports.Move = function(robot) {
     validateRobot(robot);
@@ -105,6 +129,11 @@ exports.Move = function(robot) {
     }
 }
 
+// ProcessCommands
+// ---------------
+//
+// This takes an array of commands and executes them in order on the specified robot.
+// Valid Commands are Left, Right and Move.
 
 exports.ProcessCommands = function(robot, commands) {
     validateRobot(robot);

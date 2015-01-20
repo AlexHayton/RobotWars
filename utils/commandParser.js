@@ -22,6 +22,9 @@ module.exports = function(lineToParse, outputFunction) {
     check.string(lineToParse);
     var validInput = false;
     
+    // Check for arena commands
+    // Arena commands are typically
+    
     var arenaRegexMatches = lineToParse.match(arenaRegex);
     if (arenaRegexMatches !== null)
     {
@@ -29,6 +32,8 @@ module.exports = function(lineToParse, outputFunction) {
         var sizeY = Number(arenaRegexMatches[2]);
         arenaController.CreateArena(sizeX, sizeY);
         validInput = true;
+        outputFunction("Setting the arena size to " + sizeX + " x " + sizeY);
+        outputFunction("Please now add some robots, in the format 'X Y Direction' e.g. '1 2 N'");
     }
     
     var robotRegexMatches = lineToParse.match(robotRegex);
@@ -64,7 +69,8 @@ module.exports = function(lineToParse, outputFunction) {
         }
         
         var robot = robotController.CreateRobot(X, Y, direction);
-        outputFunction("robot added at X="+X+" Y="+Y+" Direction="+direction.value);
+        outputFunction("Robot added at X="+X+" Y="+Y+" Direction="+direction.key);
+        outputFunction("Awaiting move commands. Valid commands are [L]eft, [R]ight or [M]ove e.g. 'LMMRMM'");
         validInput = true;
     }
     

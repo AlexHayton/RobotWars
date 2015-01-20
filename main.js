@@ -27,7 +27,7 @@ var std = readline.createInterface({
   output: process.stdout
 })
 .on('line', function(lineToParse) {
-  commandParser(lineToParse, process.write);
+  commandParser(lineToParse, console.log);
 });
 
-commandParser
+console.log("Please enter the size of the arena in X Y e.g. '5 5'");

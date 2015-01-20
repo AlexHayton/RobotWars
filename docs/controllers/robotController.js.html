@@ -7,9 +7,11 @@
 </td><td class="code"><div class="highlight"><pre></pre></div></td></tr><tr id="section-3"><td class="docs"><div class="pilwrap"><a href="#section-3" class="pilcrow">&#182;</a></div><p>This module is responsible for manipulating robots.</p>
 </td><td class="code"><div class="highlight"><pre><span class="kd">function</span> <span class="nx">validateRobot</span><span class="p">(</span><span class="nx">robot</span><span class="p">)</span> <span class="p">{</span>
     <span class="nx">RobotModel</span><span class="p">.</span><span class="nx">validate</span><span class="p">(</span><span class="nx">robot</span><span class="p">);</span>
-<span class="p">}</span>
+<span class="p">}</span></pre></div></td></tr><tr id="section-4"><td class="docs"><div class="pilwrap"><a href="#section-4" class="pilcrow">&#182;</a></div><h2>CreateRobot</h2>
 
-<span class="nx">exports</span><span class="p">.</span><span class="nx">CreateRobot</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">x</span><span class="p">,</span> <span class="nx">y</span><span class="p">,</span> <span class="nx">direction</span><span class="p">)</span> <span class="p">{</span>
+<p>Creates a robot at the specified coordinates and facing in a certain direction
+The direction must be one of the direction enum types (DirectionEnum.North, South etc.)</p>
+</td><td class="code"><div class="highlight"><pre><span class="nx">exports</span><span class="p">.</span><span class="nx">CreateRobot</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">x</span><span class="p">,</span> <span class="nx">y</span><span class="p">,</span> <span class="nx">direction</span><span class="p">)</span> <span class="p">{</span>
     <span class="kd">var</span> <span class="nx">robot</span> <span class="o">=</span> <span class="nx">RobotModel</span><span class="p">.</span><span class="nx">create</span><span class="p">();</span>
     <span class="nx">robot</span><span class="p">.</span><span class="nx">x</span> <span class="o">=</span> <span class="nx">x</span><span class="p">;</span>
     <span class="nx">robot</span><span class="p">.</span><span class="nx">y</span> <span class="o">=</span> <span class="nx">y</span><span class="p">;</span>
@@ -18,9 +20,11 @@
     <span class="nx">validateRobot</span><span class="p">(</span><span class="nx">robot</span><span class="p">);</span>
     <span class="nx">arenaController</span><span class="p">.</span><span class="nx">AddRobot</span><span class="p">(</span><span class="nx">robot</span><span class="p">);</span>
     <span class="k">return</span> <span class="nx">robot</span><span class="p">;</span>
-<span class="p">}</span>
+<span class="p">}</span></pre></div></td></tr><tr id="section-5"><td class="docs"><div class="pilwrap"><a href="#section-5" class="pilcrow">&#182;</a></div><h2>TurnLeft</h2>
 
-<span class="nx">exports</span><span class="p">.</span><span class="nx">TurnLeft</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">robot</span><span class="p">)</span> <span class="p">{</span>
+<p>This turns the passed-in robot 90 degrees to the left. 
+Position is not affected.</p>
+</td><td class="code"><div class="highlight"><pre><span class="nx">exports</span><span class="p">.</span><span class="nx">TurnLeft</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">robot</span><span class="p">)</span> <span class="p">{</span>
     <span class="nx">validateRobot</span><span class="p">(</span><span class="nx">robot</span><span class="p">);</span>
     
     <span class="k">switch</span> <span class="p">(</span><span class="nx">robot</span><span class="p">.</span><span class="nx">direction</span><span class="p">)</span>
@@ -41,9 +45,11 @@
             <span class="nx">robot</span><span class="p">.</span><span class="nx">direction</span> <span class="o">=</span> <span class="nx">DirectionEnum</span><span class="p">.</span><span class="nx">South</span><span class="p">;</span>
             <span class="k">break</span><span class="p">;</span>
     <span class="p">}</span>
-<span class="p">}</span>
+<span class="p">}</span></pre></div></td></tr><tr id="section-6"><td class="docs"><div class="pilwrap"><a href="#section-6" class="pilcrow">&#182;</a></div><h2>TurnRight</h2>
 
-<span class="nx">exports</span><span class="p">.</span><span class="nx">TurnRight</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">robot</span><span class="p">)</span> <span class="p">{</span>
+<p>This turns the passed-in robot 90 degrees to the right. 
+Position is not affected.</p>
+</td><td class="code"><div class="highlight"><pre><span class="nx">exports</span><span class="p">.</span><span class="nx">TurnRight</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">robot</span><span class="p">)</span> <span class="p">{</span>
     <span class="nx">validateRobot</span><span class="p">(</span><span class="nx">robot</span><span class="p">);</span>
     
     <span class="k">switch</span> <span class="p">(</span><span class="nx">robot</span><span class="p">.</span><span class="nx">direction</span><span class="p">)</span>
@@ -64,9 +70,11 @@
             <span class="nx">robot</span><span class="p">.</span><span class="nx">direction</span> <span class="o">=</span> <span class="nx">DirectionEnum</span><span class="p">.</span><span class="nx">North</span><span class="p">;</span>
             <span class="k">break</span><span class="p">;</span>
     <span class="p">}</span>
-<span class="p">}</span>
+<span class="p">}</span></pre></div></td></tr><tr id="section-7"><td class="docs"><div class="pilwrap"><a href="#section-7" class="pilcrow">&#182;</a></div><h2>Move</h2>
 
-<span class="nx">exports</span><span class="p">.</span><span class="nx">Move</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">robot</span><span class="p">)</span> <span class="p">{</span>
+<p>This moves the robot forward by one unit along its direction of travel, if possible. 
+Direction is not affected.</p>
+</td><td class="code"><div class="highlight"><pre><span class="nx">exports</span><span class="p">.</span><span class="nx">Move</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">robot</span><span class="p">)</span> <span class="p">{</span>
     <span class="nx">validateRobot</span><span class="p">(</span><span class="nx">robot</span><span class="p">);</span>
     
     <span class="k">switch</span> <span class="p">(</span><span class="nx">robot</span><span class="p">.</span><span class="nx">direction</span><span class="p">)</span>
@@ -99,10 +107,11 @@
             <span class="p">}</span>
             <span class="k">break</span><span class="p">;</span>
     <span class="p">}</span>
-<span class="p">}</span>
+<span class="p">}</span></pre></div></td></tr><tr id="section-8"><td class="docs"><div class="pilwrap"><a href="#section-8" class="pilcrow">&#182;</a></div><h2>ProcessCommands</h2>
 
-
-<span class="nx">exports</span><span class="p">.</span><span class="nx">ProcessCommands</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">robot</span><span class="p">,</span> <span class="nx">commands</span><span class="p">)</span> <span class="p">{</span>
+<p>This takes an array of commands and executes them in order on the specified robot.
+Valid Commands are Left, Right and Move.</p>
+</td><td class="code"><div class="highlight"><pre><span class="nx">exports</span><span class="p">.</span><span class="nx">ProcessCommands</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">robot</span><span class="p">,</span> <span class="nx">commands</span><span class="p">)</span> <span class="p">{</span>
     <span class="nx">validateRobot</span><span class="p">(</span><span class="nx">robot</span><span class="p">);</span>
     
     <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">util</span><span class="p">.</span><span class="nx">isArray</span><span class="p">(</span><span class="nx">commands</span><span class="p">))</span> <span class="p">{</span>
@@ -131,4 +140,4 @@
     <span class="p">});</span>
 <span class="p">}</span>
 
-</pre></div></td></tr></tbody></table><div id="generated">generated Tue Jan 20 2015 17:09:39 GMT+0000 (UTC)  </div><div id="projectname"><a href="../index.html">Robot Wars</a></div></div></body></html>
+</pre></div></td></tr></tbody></table><div id="generated">generated Tue Jan 20 2015 23:38:06 GMT+0000 (UTC)  </div><div id="projectname"><a href="../index.html">Robot Wars</a></div></div></body></html>
