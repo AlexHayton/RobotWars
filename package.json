@@ -10,7 +10,9 @@
     "readline": "~0.0.7",
     "check-types": "~2.2.0",
     "enum": "~0.2.7",
-    "nodejs-model": "~0.1.6"
+    "nodejs-model": "~0.1.6",
+    "rewire": "~2.1.4",
+    "validate.js": "~0.3.2"
   },
   "docco_husky": {
     "output_dir": "docs",                   
