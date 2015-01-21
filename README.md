@@ -16,7 +16,7 @@
 Welcome to Robot Wars!
 
 To run the project type 
-	node main 
+	`node main` 
 in the console. You may need to type 
-	npm install
+	`npm install`
 first to download all the dependencies.
