@@ -24,7 +24,7 @@ first to download all the dependencies.
 I have demonstrated the following features in my code:
 
 * Dependency injection and mocking via the 'rewire' plugin for Node.
-* A full suite of BDD unit tests implemented via 'jasmine-node'. To execute these type 'jasmine-node spec' in a terminal.
+* A full suite of BDD unit tests implemented via 'jasmine-node'. To execute these type `jasmine-node spec` in a terminal.
 * Separation of concerns, keeping the controllers apart from the model and user interface layers. Stubs and Mocking have allowed testing of each layer independently and straight-through tests confirm that the test cases provided are working.
 * Additional input safety via the use of a specialised enum library and validations at the model level. Further work could be done here to enforce type safety if I had used TypeScript.
 * Detailed code documentation via docco.
